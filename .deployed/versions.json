@@ -1,0 +1,18 @@
+[
+  {
+    "apihost": "https://faas-nyc1-2ef2e6cc.doserverless.co",
+    "namespace": "fn-246aea7b-8ca0-4d70-8002-7f1f1471d70e",
+    "packageVersions": {
+      "memelord": {
+        "version": "0.0.4",
+        "digest": "afde14b23cdc5e973ee78a9b36d669a486afbfa40e2ba229533f2b0992541bf9"
+      }
+    },
+    "actionVersions": {
+      "memelord/generate-meme": {
+        "version": "0.0.4",
+        "digest": "af99bab0d92c1382e74b2c2eef934e9a150a8a49f94aee9df061264b5f14ab2d"
+      }
+    }
+  }
+]

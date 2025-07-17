@@ -1,0 +1,13 @@
+{
+  "name": "generate-meme",
+  "version": "1.0.0",
+  "description": "Generate meme images using Imgflip API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "keywords": ["meme", "imgflip", "image", "generation"],
+  "author": "Memelord Wars",
+  "license": "MIT"
+}

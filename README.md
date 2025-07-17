@@ -14,6 +14,7 @@ Memelord Wars showcases the power of DigitalOcean's GradientAI Platform through 
 - **Multi-agent orchestration** - Two specialized agents with different personalities and capabilities
 - **Knowledge base integration** - RAG capabilities with crawled and uploaded data
 - **Function calling simulation** - Enhanced prompts with "real-time" data for the Spicy Agent
+- **DALL-E 3 image generation** - Actual meme image creation via OpenAI's DALL-E 3 API
 - **Performance monitoring** - Real-time token usage, latency, and cost tracking
 - **Meme format variety** - Random selection from 12+ different meme formats per agent
 - **Error resilience** - Graceful fallbacks and backup responses
@@ -65,6 +66,9 @@ REACT_APP_CLASSIC_AGENT_API_KEY=your_classic_agent_api_key
 # Model configurations
 REACT_APP_SPICY_MODEL=deepseek-r1-distill-llama-70b
 REACT_APP_CLASSIC_MODEL=llama3.3-70b-instruct
+
+# OpenAI API key for DALL-E 3 image generation
+REACT_APP_OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ### Running the Application
@@ -113,7 +117,7 @@ npx serve -s build -l 3000
 - **Agent Creation**: Custom AI agents with specialized instructions
 - **Knowledge Base Integration**: RAG with multiple data sources
 - **Model Selection**: Different models for different use cases
-- **Function Calling**: Real-time data integration (simulated)
+- **Function Calling**: Real-time data integration and external API calls (DALL-E 3)
 - **Performance Monitoring**: Token usage and cost tracking
 - **Error Handling**: Graceful fallbacks and backup responses
 
