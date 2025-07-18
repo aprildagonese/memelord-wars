@@ -6,7 +6,7 @@ An AI-powered meme generation battle demo built with React and DigitalOcean's Gr
 
 Memelord Wars showcases the power of DigitalOcean's GradientAI Platform through an entertaining demo where two specialized AI agents compete to create the best memes:
 
-- **🌶️ Spicy Agent** - Uses DeepSeek R1 Distill Llama 70B with simulated real-time data access for current, trend-aware memes
+- **🌶️ Spicy Agent** - Uses OpenAI GPT-4o with simulated real-time data access for current, trend-aware memes
 - **🎩 Classic Agent** - Uses Llama 3.3 70B with timeless humor focusing on universal human experiences
 
 ## Features
@@ -24,7 +24,7 @@ Memelord Wars showcases the power of DigitalOcean's GradientAI Platform through 
 
 - **Frontend**: React 18.2.0 with modern CSS
 - **Backend**: DigitalOcean GradientAI Platform
-- **Models**: DeepSeek R1 Distill Llama 70B (Spicy) and Llama 3.3 70B (Classic)
+- **Models**: OpenAI GPT-4o (Spicy) and Llama 3.3 70B (Classic)
 - **Build Tools**: Create React App
 - **Deployment**: Static build with serve
 
@@ -64,7 +64,7 @@ REACT_APP_CLASSIC_AGENT_ENDPOINT=your_classic_agent_endpoint
 REACT_APP_CLASSIC_AGENT_API_KEY=your_classic_agent_api_key
 
 # Model configurations
-REACT_APP_SPICY_MODEL=deepseek-r1-distill-llama-70b
+REACT_APP_SPICY_MODEL=openai-gpt-4o
 REACT_APP_CLASSIC_MODEL=llama3.3-70b-instruct
 
 # OpenAI API key for DALL-E 3 image generation
@@ -87,7 +87,7 @@ npx serve -s build -l 3000
 ## Agent Setup
 
 ### Spicy Agent
-- **Model**: DeepSeek R1 Distill Llama 70B
+- **Model**: OpenAI GPT-4o
 - **Temperature**: 0.8
 - **Knowledge Base**: 
   - Upload: `spicy_agent_knowledge_base.md`

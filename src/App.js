@@ -90,8 +90,8 @@ const generateMemeImage = async (memeFormat, textArray) => {
       template = MEME_TEMPLATES['Drake Hotline Bling'];
     }
 
-    const username = process.env.IMGFLIP_USERNAME;
-    const password = process.env.IMGFLIP_PASSWORD;
+    const username = process.env.REACT_APP_IMGFLIP_USERNAME;
+    const password = process.env.REACT_APP_IMGFLIP_PASSWORD;
 
     // Build params with multiple text boxes
     const params = new URLSearchParams({
@@ -134,13 +134,18 @@ const generateMemeImage = async (memeFormat, textArray) => {
 };
 
 // Configuration from environment variables
+console.log('Environment variables debug:', {
+  REACT_APP_SPICY_MODEL: process.env.REACT_APP_SPICY_MODEL,
+  REACT_APP_TEST_VAR: process.env.REACT_APP_TEST_VAR
+});
+
 const AGENT_CONFIG = {
   spicy: {
     name: "🌶️ Spicy Agent",
     description: "Real-time data access, trending topics, breaking news",
     endpoint: process.env.REACT_APP_SPICY_AGENT_ENDPOINT || process.env.DO_ENDPOINT,
     apiKey: process.env.REACT_APP_SPICY_AGENT_API_KEY || process.env.MODEL_ACCESS_KEY,
-    model: process.env.REACT_APP_SPICY_MODEL || "deepseek-r1-distill-llama-70b"
+    model: process.env.REACT_APP_SPICY_MODEL || "openai-gpt-4o"
   },
   classic: {
     name: "🎩 Classic Agent", 
@@ -489,17 +494,20 @@ Timeless take on "${userPrompt}":
     }
   };
 
-  const handleBattle = async () => {
-    if (!prompt.trim()) return;
+  const handleBattle = async (rerunPrompt = null) => {
+    const battlePrompt = rerunPrompt || prompt;
+    if (!battlePrompt.trim()) return;
     
     setLoading(true);
     setResponses({ spicy: null, classic: null });
     setMetrics({ spicy: null, classic: null });
     
-    // Set the current battle prompt for display and clear input
-    const currentPrompt = prompt;
+    // Set the current battle prompt for display and clear input only if not re-running
+    const currentPrompt = battlePrompt;
     setCurrentBattlePrompt(currentPrompt);
-    setPrompt('');
+    if (!rerunPrompt) {
+      setPrompt('');
+    }
 
     try {
       // Call both agents in parallel
@@ -701,12 +709,20 @@ Timeless take on "${userPrompt}":
         </div>
       </div>
 
-      {(responses.spicy?.content || responses.classic?.content) && !loading && (
-        <div style={{textAlign: 'center', marginTop: '30px', fontSize: '1.2rem'}}>
-          <p>🗳️ <strong>Audience Vote:</strong> Which meme wins this round?</p>
-          <p style={{fontSize: '0.9rem', opacity: 0.8, marginTop: '10px'}}>
-            Raise your hands for your favorite!
-          </p>
+      {(responses.spicy?.content || responses.classic?.content) && !loading && currentBattlePrompt && (
+        <div style={{textAlign: 'center', marginTop: '30px'}}>
+          <button
+            className="battle-button"
+            onClick={() => handleBattle(currentBattlePrompt)}
+            style={{
+              background: '#6c757d',
+              fontSize: '1rem',
+              padding: '12px 30px',
+              opacity: 0.8
+            }}
+          >
+            👎 These are terrible, try '{currentBattlePrompt}' again
+          </button>
         </div>
       )}
     </div>

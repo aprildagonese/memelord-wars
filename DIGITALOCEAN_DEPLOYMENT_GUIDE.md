@@ -154,12 +154,12 @@ Use the `mcp__digitalocean-mcp-local__create_app` function:
               "scope": "BUILD_TIME"
             },
             {
-              "key": "IMGFLIP_USERNAME",
+              "key": "REACT_APP_IMGFLIP_USERNAME",
               "value": "adagonese",
               "scope": "BUILD_TIME"
             },
             {
-              "key": "IMGFLIP_PASSWORD",
+              "key": "REACT_APP_IMGFLIP_PASSWORD",
               "value": "By8Iw5YDc#bx8iLb",
               "scope": "BUILD_TIME",
               "type": "SECRET"
@@ -188,7 +188,7 @@ Use the `mcp__digitalocean-mcp-local__create_app` function:
             },
             {
               "key": "REACT_APP_SPICY_MODEL",
-              "value": "deepseek-r1-distill-llama-70b",
+              "value": "openai-gpt-4o",
               "scope": "BUILD_TIME"
             },
             {
@@ -289,15 +289,15 @@ Use the `mcp__digitalocean-mcp-local__create_app` function:
 ### Model Configuration
 | Variable | Value | Type | Description |
 |----------|-------|------|-------------|
-| `REACT_APP_SPICY_MODEL` | `deepseek-r1-distill-llama-70b` | BUILD_TIME | Model for spicy agent |
+| `REACT_APP_SPICY_MODEL` | `openai-gpt-4o` | BUILD_TIME | Model for spicy agent |
 | `REACT_APP_CLASSIC_MODEL` | `llama3.3-70b-instruct` | BUILD_TIME | Model for classic agent |
 | `REACT_APP_MODEL_ACCESS_KEY` | `sk-do-tL1QQa1HLk8TAwGsebDQbjh0QsfO675Gfp8IfBu8yWDirzDOihnm1SAwMG` | SECRET | DigitalOcean model access key |
 
 ### Imgflip API Configuration
 | Variable | Value | Type | Description |
 |----------|-------|------|-------------|
-| `IMGFLIP_USERNAME` | `adagonese` | BUILD_TIME | Imgflip API username |
-| `IMGFLIP_PASSWORD` | `By8Iw5YDc#bx8iLb` | SECRET | Imgflip API password |
+| `REACT_APP_IMGFLIP_USERNAME` | `adagonese` | BUILD_TIME | Imgflip API username |
+| `REACT_APP_IMGFLIP_PASSWORD` | `By8Iw5YDc#bx8iLb` | SECRET | Imgflip API password |
 
 ## Expected Build Process
 
