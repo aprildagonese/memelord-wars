@@ -1,19 +1,60 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-// Mock function calling endpoints
-const mockFunctionCalls = {
-  getTrendingTopics: () => Promise.resolve([
-    "ChatGPT-5 rumors",
-    "AI safety debate",
-    "Nvidia stock surge",
-    "Remote work memes"
-  ]),
-  getCurrentNews: () => Promise.resolve([
-    "Tech layoffs continue",
-    "AI regulation hearing",
-    "Startup funding down 40%"
-  ]),
+// Real API function calls
+const realFunctionCalls = {
+  getTrendingTopics: async () => {
+    try {
+      // Use Hacker News API to get trending tech topics
+      const response = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json');
+      const topStoryIds = response.data.slice(0, 10); // Get top 10 stories
+      
+      const stories = await Promise.all(
+        topStoryIds.map(async (id) => {
+          const storyResponse = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+          return storyResponse.data.title;
+        })
+      );
+      
+      // Return first 6 trending topics
+      return stories.slice(0, 6);
+    } catch (error) {
+      console.error('Failed to fetch trending topics:', error);
+      // Fallback to mock data
+      return [
+        "ChatGPT-5 rumors",
+        "AI safety debate", 
+        "Nvidia stock surge",
+        "Remote work memes"
+      ];
+    }
+  },
+  getCurrentNews: async () => {
+    try {
+      // Try Reddit API first to see what it returns
+      const response = await axios.get('https://www.reddit.com/r/technology/hot.json?limit=10');
+      const posts = response.data.data.children;
+      
+      const allNews = posts.map(post => post.data.title);
+      const news = allNews.slice(0, 6);
+      
+      return news;
+    } catch (error) {
+      console.error('Failed to fetch Reddit news (CORS likely):', error);
+      
+      // Fallback to actual current Reddit r/technology topics
+      const fallbackNews = [
+        "Trump's firing of Democratic FTC commissioner was unlawful, judge rules",
+        "Bernie Sanders says that if AI makes us so productive, we should get a 4-day work week",
+        "Facebook Deletes 10 Million Accounts And Warns The Purge Will Go On",
+        "Netflix shares fall as weak dollar-driven forecast fails to impress",
+        "The FBI's Jeffrey Epstein Prison Video Had Nearly 3 Minutes Cut Out",
+        "Trump's $1.1 Billion Cuts to NPR, PBS Pass Republican-Controlled House"
+      ];
+      
+      return fallbackNews;
+    }
+  },
   getStockPrice: (symbol) => Promise.resolve({
     symbol,
     price: Math.floor(Math.random() * 500) + 100,
@@ -39,7 +80,6 @@ const MEME_TEMPLATES = {
   'Bernie I Am Once Again Asking For Your Support': { id: '222403160', boxes: 2 },
   'Blank Nut Button': { id: '119139145', boxes: 2 },
   'Tuxedo Winnie The Pooh': { id: '178591752', boxes: 2 },
-  'Epic Handshake': { id: '135256802', boxes: 2 },
   'Hide the Pain Harold': { id: '27813981', boxes: 2 },
   'Monkey Puppet': { id: '148909805', boxes: 2 },
   "Y'all Got Any More Of That": { id: '124055727', boxes: 2 },
@@ -47,17 +87,11 @@ const MEME_TEMPLATES = {
   'Oprah You Get A': { id: '28251713', boxes: 2 },
   'Marked Safe From': { id: '161865971', boxes: 2 },
   "I Bet He's Thinking About Other Women": { id: '110163934', boxes: 2 },
-  'Trump Bill Signing': { id: '91545132', boxes: 2 },
-  "This Is Where I'd Put My Trophy If I Had One": { id: '3218037', boxes: 2 },
   'This Is Fine': { id: '55311130', boxes: 2 },
-  'This is Fine': { id: '55311130', boxes: 2 },
   'Success Kid': { id: '61544', boxes: 2 },
   'Megamind peeking': { id: '370867422', boxes: 2 },
-  'Types of Headaches meme': { id: '119215120', boxes: 2 },
   'You Guys are Getting Paid': { id: '177682295', boxes: 2 },
-  'where monkey': { id: '316466202', boxes: 2 },
   'Squidward window': { id: '67452763', boxes: 2 },
-  'Bernie Sanders Once Again Asking': { id: '224015000', boxes: 2 },
 };
 
 
@@ -113,8 +147,6 @@ const generateMemeImage = async (memeFormat, textArray) => {
       }
     }
 
-    console.log('Imgflip API params:', Object.fromEntries(params.entries()));
-
     const response = await axios.post('https://api.imgflip.com/caption_image', params, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -134,11 +166,6 @@ const generateMemeImage = async (memeFormat, textArray) => {
 };
 
 // Configuration from environment variables
-console.log('Environment variables debug:', {
-  REACT_APP_SPICY_MODEL: process.env.REACT_APP_SPICY_MODEL,
-  REACT_APP_TEST_VAR: process.env.REACT_APP_TEST_VAR
-});
-
 const AGENT_CONFIG = {
   spicy: {
     name: "🌶️ Spicy Agent",
@@ -174,22 +201,20 @@ function App() {
     const startTime = Date.now();
     
     try {
-      // Simulate function calls for demo
-      const trends = await mockFunctionCalls.getTrendingTopics();
-      const news = await mockFunctionCalls.getCurrentNews();
+      // TEMPORARILY COMMENTED OUT - Testing agent knowledge base crawling instead
+      // const trends = await realFunctionCalls.getTrendingTopics();
+      // const news = await realFunctionCalls.getCurrentNews();
       
       // Code selects the template randomly to ensure variety
       const templateNames = Object.keys(MEME_TEMPLATES);
       const randomIndex = Math.floor(Math.random() * templateNames.length);
       const selectedTemplate = templateNames[randomIndex];
-      console.log('🎲 SPICY AGENT - Code selected template:', selectedTemplate);
       
       const enhancedPrompt = `You are the 🌶️ SPICY AGENT! Create bold, current, and edgy memes that reference real-time trends.
 
 User prompt: "${userPrompt}"
 
-CURRENT TRENDING TOPICS: ${trends.join(', ')}
-BREAKING NEWS: ${news.join(', ')}
+INSTRUCTIONS: Use your knowledge base to find current trending topics from Hacker News and Reddit r/technology. Reference these current events and trending topics in your memes to make them timely and relevant.
 
 ASSIGNED TEMPLATE: ${selectedTemplate}
 
@@ -219,7 +244,7 @@ Examples for different templates:
 For "Drake Hotline Bling":
 **TEXT_OVERLAY:**
 Working overtime without AI
-Using AI tools while ${trends[0]} is trending
+Using AI tools with current tech trends
 **SPICY_COMMENTARY:** Everyone's switching to AI tools faster than Drake switches his mind! 🔥
 
 For "Two Buttons":
@@ -231,7 +256,6 @@ Ship it and hope for the best
 Create spicy text for the "${selectedTemplate}" template about "${userPrompt}"! 🌶️`;
 
       // GradientAI agent endpoint - correct format
-      console.log('Attempting API call to:', `${AGENT_CONFIG.spicy.endpoint}/api/v1/chat/completions`);
       
       const response = await axios.post(`${AGENT_CONFIG.spicy.endpoint}/api/v1/chat/completions`, {
         messages: [
@@ -268,11 +292,6 @@ Create spicy text for the "${selectedTemplate}" template about "${userPrompt}"! 
       // Extract text overlay only (template is pre-selected by code)
       const chosenTemplate = selectedTemplate;
       
-      console.log('🌶️ SPICY AGENT DEBUG:');
-      console.log('- Using pre-selected template:', chosenTemplate);
-      console.log('- Raw response contains TEXT_OVERLAY:', content.includes('**TEXT_OVERLAY:**'));
-      
-      
       const textOverlayMatch = content.match(/\*\*TEXT_OVERLAY:\*\*\s*(.+?)(?=\*\*|$)/s);
       const textOverlay = textOverlayMatch ? textOverlayMatch[1].trim() : '';
       
@@ -299,7 +318,6 @@ Create spicy text for the "${selectedTemplate}" template about "${userPrompt}"! 
         }
       }
       
-      console.log('Debug - Chosen Template:', chosenTemplate, 'Boxes:', maxBoxes, 'Text Array:', textArray);
       
       // Generate image with chosen template
       const imageUrl = await generateMemeImage(chosenTemplate, textArray);
@@ -315,11 +333,11 @@ Create spicy text for the "${selectedTemplate}" template about "${userPrompt}"! 
       };
     } catch (error) {
       console.error('Spicy Agent failed:', error.message);
-      // Fallback to mock if API fails - generate backup meme
-      const trends = await mockFunctionCalls.getTrendingTopics();
+      // TEMPORARILY COMMENTED OUT - Testing agent knowledge base crawling instead
+      // const trends = await realFunctionCalls.getTrendingTopics();
       const backupTextArray = [
         'Regular boring content',
-        `${trends[0]} while ${userPrompt.toLowerCase()}`
+        `Something about ${userPrompt.toLowerCase()} gone wrong`
       ];
       
       const backupImageUrl = await generateMemeImage('Drake Hotline Bling', backupTextArray);
@@ -327,11 +345,11 @@ Create spicy text for the "${selectedTemplate}" template about "${userPrompt}"! 
       return {
         content: `🔥 SPICY MEME BACKUP! 🔥
 
-Based on "${userPrompt}" and trending: ${trends[0]}
+Based on "${userPrompt}" with agent knowledge base data:
 
 **Drake pointing meme:**
 👎 Regular boring content  
-👍 ${trends[0]} while ${userPrompt.toLowerCase()}
+👍 Something about ${userPrompt.toLowerCase()} gone wrong
 
 *Note: Using backup response due to API issue*
 *Error: ${error.message}*`,
@@ -352,7 +370,6 @@ Based on "${userPrompt}" and trending: ${trends[0]}
       const templateNames = Object.keys(MEME_TEMPLATES);
       const randomIndex = Math.floor(Math.random() * templateNames.length);
       const selectedClassicTemplate = templateNames[randomIndex];
-      console.log('🎲 CLASSIC AGENT - Code selected template:', selectedClassicTemplate);
       
       const classicPrompt = `You are the 🎩 CLASSIC AGENT! Create timeless, nostalgic memes using evergreen formats that never go out of style.
 
@@ -424,11 +441,6 @@ Create timeless text for the "${selectedClassicTemplate}" template about "${user
       // Extract text overlay only (template is pre-selected by code)
       const chosenTemplate = selectedClassicTemplate;
       
-      console.log('🎩 CLASSIC AGENT DEBUG:');
-      console.log('- Using pre-selected template:', chosenTemplate);
-      console.log('- Raw response contains TEXT_OVERLAY:', content.includes('**TEXT_OVERLAY:**'));
-      
-      
       const textOverlayMatch = content.match(/\*\*TEXT_OVERLAY:\*\*\s*(.+?)(?=\*\*|$)/s);
       const textOverlay = textOverlayMatch ? textOverlayMatch[1].trim() : '';
       
@@ -452,7 +464,6 @@ Create timeless text for the "${selectedClassicTemplate}" template about "${user
         }
       }
       
-      console.log('Debug - Chosen Template:', chosenTemplate, 'Boxes:', maxBoxes, 'Text Array:', textArray);
       
       // Generate image with chosen template
       const imageUrl = await generateMemeImage(chosenTemplate, textArray);
@@ -496,7 +507,7 @@ Timeless take on "${userPrompt}":
 
   const handleBattle = async (rerunPrompt = null) => {
     const battlePrompt = rerunPrompt || prompt;
-    if (!battlePrompt.trim()) return;
+    if (!battlePrompt || !battlePrompt.trim()) return;
     
     setLoading(true);
     setResponses({ spicy: null, classic: null });
@@ -719,6 +730,14 @@ Timeless take on "${userPrompt}":
               fontSize: '1rem',
               padding: '12px 30px',
               opacity: 0.8
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.opacity = '1';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.opacity = '0.8';
+              e.target.style.transform = 'translateY(0)';
             }}
           >
             👎 These are terrible, try '{currentBattlePrompt}' again
