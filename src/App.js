@@ -90,8 +90,8 @@ const generateMemeImage = async (memeFormat, textArray) => {
       template = MEME_TEMPLATES['Drake Hotline Bling'];
     }
 
-    const username = process.env.REACT_APP_IMGFLIP_USERNAME;
-    const password = process.env.REACT_APP_IMGFLIP_PASSWORD;
+    const username = process.env.IMGFLIP_USERNAME;
+    const password = process.env.IMGFLIP_PASSWORD;
 
     // Build params with multiple text boxes
     const params = new URLSearchParams({

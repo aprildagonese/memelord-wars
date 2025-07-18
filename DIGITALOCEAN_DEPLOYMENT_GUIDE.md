@@ -154,12 +154,12 @@ Use the `mcp__digitalocean-mcp-local__create_app` function:
               "scope": "BUILD_TIME"
             },
             {
-              "key": "REACT_APP_IMGFLIP_USERNAME",
+              "key": "IMGFLIP_USERNAME",
               "value": "adagonese",
               "scope": "BUILD_TIME"
             },
             {
-              "key": "REACT_APP_IMGFLIP_PASSWORD",
+              "key": "IMGFLIP_PASSWORD",
               "value": "By8Iw5YDc#bx8iLb",
               "scope": "BUILD_TIME",
               "type": "SECRET"
@@ -296,8 +296,8 @@ Use the `mcp__digitalocean-mcp-local__create_app` function:
 ### Imgflip API Configuration
 | Variable | Value | Type | Description |
 |----------|-------|------|-------------|
-| `REACT_APP_IMGFLIP_USERNAME` | `adagonese` | BUILD_TIME | Imgflip API username |
-| `REACT_APP_IMGFLIP_PASSWORD` | `By8Iw5YDc#bx8iLb` | SECRET | Imgflip API password |
+| `IMGFLIP_USERNAME` | `adagonese` | BUILD_TIME | Imgflip API username |
+| `IMGFLIP_PASSWORD` | `By8Iw5YDc#bx8iLb` | SECRET | Imgflip API password |
 
 ## Expected Build Process
 
