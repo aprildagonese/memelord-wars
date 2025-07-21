@@ -6,19 +6,14 @@ An AI-powered meme generation battle demo built with React and DigitalOcean's Gr
 
 Memelord Wars showcases the power of DigitalOcean's GradientAI Platform through an entertaining demo where two specialized AI agents compete to create the best memes:
 
-- **🌶️ Spicy Agent** - Uses OpenAI GPT-4o with simulated real-time data access for current, trend-aware memes
+- **🌶️ Spicy Agent** - Uses OpenAI GPT-4o with real-time data access for current, trend-aware memes
 - **🎩 Classic Agent** - Uses Llama 3.3 70B with timeless humor focusing on universal human experiences
 
 ## Features
 
 - **Multi-agent orchestration** - Two specialized agents with different personalities and capabilities
 - **Knowledge base integration** - RAG capabilities with crawled and uploaded data
-- **Function calling simulation** - Enhanced prompts with "real-time" data for the Spicy Agent
-- **DALL-E 3 image generation** - Actual meme image creation via OpenAI's DALL-E 3 API
 - **Performance monitoring** - Real-time token usage, latency, and cost tracking
-- **Meme format variety** - Random selection from 12+ different meme formats per agent
-- **Error resilience** - Graceful fallbacks and backup responses
-- **Modern UI** - Clean, responsive design optimized for demo presentations
 
 ## Technology Stack
 
@@ -117,9 +112,9 @@ npx serve -s build -l 3000
 - **Agent Creation**: Custom AI agents with specialized instructions
 - **Knowledge Base Integration**: RAG with multiple data sources
 - **Model Selection**: Different models for different use cases
-- **Function Calling**: Real-time data integration and external API calls (DALL-E 3)
 - **Performance Monitoring**: Token usage and cost tracking
-- **Error Handling**: Graceful fallbacks and backup responses
+- **Traceability**: Track interactions and data sources
+- **Evaluations**: Test prompts as part of deployment
 
 ## Project Structure
 
